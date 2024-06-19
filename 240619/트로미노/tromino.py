@@ -1,13 +1,13 @@
 '''
-바깥쪽을 0으로 채우고 가운데를 중심으로 십자 모양 5개 중 큰 것 3개의 합을 비교하며 탐색
+바깥쪽을 0으로 채우고 가운데를 중심으로 십자 모양, 가운데와 가운데 제외 2개의 합 최대
 '''
 def sum_cal(row, col):
     di, dj = [0, 1, 0, -1], [1, 0, -1, 0]
-    cal_lst = [grid[row][col]]
+    cal_lst = []
     for k in range(4):
         cal_lst.append(grid[row + di[k]][col + dj[k]])
     cal_lst.sort(reverse=True)
-    return sum(cal_lst[:3])
+    return grid[row][col] + sum(cal_lst[:2])
 
 n, m = map(int, input().split())
 
