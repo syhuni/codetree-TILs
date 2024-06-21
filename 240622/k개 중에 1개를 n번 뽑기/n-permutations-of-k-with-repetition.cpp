@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int n, k;
+int k, n;
 vector<int> ans_arr;
 
 
@@ -29,7 +29,7 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    cin >> n >> k;
+    cin >> k >> n;
     Pick(0);
     return 0;
 }
