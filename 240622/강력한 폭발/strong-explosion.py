@@ -6,44 +6,24 @@ import sys
 input = sys.stdin.readline
 
 didj_dict = {
-    1: [(-2,0), (-1,0), (1,0), (2,0)],
-    2: [(1,0), (0,-1), (-1,0), (0,1)],
-    3: [(1,1), (1,-1), (-1,-1), (-1,1)]
+    1: [(-2,0), (-1,0), (1,0), (2,0), (0,0)],
+    2: [(1,0), (0,-1), (-1,0), (0,1), (0,0)],
+    3: [(1,1), (1,-1), (-1,-1), (-1,1), (0,0)]
 }
 
 
-def bomb(def_cnt):
-    global loc_cnt
-    global max_val
-    global bomb_cnt
-    if def_cnt == loc_cnt:
-        max_val = max(max_val, bomb_cnt)
-        return
-
-    for k in range(1, 4):  # 폭탄 종류 1~3
-        for i, j in loc_lst:
-            # 폭발 구역 체크
-            bomb_grid[i][j] += 1
-            if bomb_grid[i][j] == 1:
+# 폭발 위치 수 계산하는 함수
+def bomb(bomb_lst):
+    bomb_cnt = 0
+    bomb_grid = [[0] * n for _ in range(n)]
+    for idx, ij in enumerate(loc_lst):
+        i, j = ij
+        for di, dj in didj_dict.get(bomb_lst[idx]):
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n and bomb_grid[ni][nj] == 0:
+                bomb_grid[ni][nj] = 1
                 bomb_cnt += 1
-            for di, dj in didj_dict.get(k):
-                ni, nj = i + di, j + dj
-                if 0 <= ni < n and 0 <= nj < n:
-                    bomb_grid[ni][nj] += 1
-                    if bomb_grid[ni][nj] == 1:
-                        bomb_cnt += 1
-            # 함수 실행
-            bomb(def_cnt + 1)
-            # 폭발 구역 원복
-            bomb_grid[i][j] -= 1
-            if bomb_grid[i][j] == 0:
-                bomb_cnt -= 1
-            for di, dj in didj_dict.get(k):
-                ni, nj = i + di, j + dj
-                if 0 <= ni < n and 0 <= nj < n:
-                    bomb_grid[ni][nj] -= 1
-                    if bomb_grid[ni][nj] == 0:
-                        bomb_cnt -= 1
+    return bomb_cnt
 
 
 # 폭탄 놓을 위치 수를 세고 위치를 저장 하는 함수
@@ -52,17 +32,26 @@ def loc_counter(n, data):
     for i in range(n):
         for j in range(n):
             if data[i][j] == 1:
-                cnt += 1
                 loc_lst.append((i, j))
     return cnt
-    
+
+
+# 순열 만들며 개수 비교하는 함수
+def dfs(lst):
+    global max_val
+    if len(loc_lst) == len(lst):
+        max_val = max(max_val, bomb(lst))
+        return
+
+    for i in range(1, 4):
+        lst.append(i)
+        dfs(lst)
+        lst.pop()
 
 n = int(input())
 grid = [list(map(int, input().split())) for _ in range(n)]
-bomb_grid = [[0] * n for _ in range(n)]
 loc_lst = []  # 설치 위치 저장 리스트
 loc_cnt = loc_counter(n, grid)
 max_val = 0
-bomb_cnt = 0
-bomb(0)
+dfs([])
 print(max_val)
