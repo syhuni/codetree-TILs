@@ -1,22 +1,20 @@
-def combinate(cnt, k):
+def find_max(cnt, i, val):
     global max_val
     if cnt == m:
-        result = comb[0]
-        for num in comb[1:]:
-            result = result ^ num
-        max_val = max(max_val, result)
+        max_val = max(max_val, val)
         return
 
-    for i in range(k, n):
-        comb.append(nums[i])
-        combinate(cnt + 1, i + 1)
-        comb.pop()
+    if i == n:
+        return
+
+    find_max(cnt + 1, i + 1, val ^ nums[i])  # 현재 인덱스 숫자 선택
+
+    find_max(cnt, i + 1, val)  # 현재 인덱스 숫자 선택 x
 
 
 n, m = map(int, input().split())
 nums = list(map(int, input().split()))
 
 max_val = 0
-comb = []
-combinate(0, 0)
+find_max(0, 0, 0)
 print(max_val)
