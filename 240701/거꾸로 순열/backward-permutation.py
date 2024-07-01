@@ -3,7 +3,7 @@ perm =[]
 visited = [0] * (n + 1)
 
 def dfs(cnt):
-    if cnt == 3:
+    if cnt == n:
         print(' '.join(map(str, perm)))
         return
 
