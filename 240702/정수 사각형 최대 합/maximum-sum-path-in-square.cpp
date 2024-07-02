@@ -32,8 +32,7 @@ int main() {
         }
     }
 
-    int ans = *max_element(matrix[n - 1], matrix[n - 1] + n);
-    cout << ans;
+    cout << matrix[n - 1][n - 1];
 
     return 0;
 }
