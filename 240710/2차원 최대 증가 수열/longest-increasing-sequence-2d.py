@@ -20,12 +20,13 @@ for i in range(2, n):
             continue
 
         dp[i][j] = 2
-        for k in range(1, j):  # i, j의 왼쪽 위 한 줄 확인
-            if not dp[i - 1][k]:
-                continue
+        for k in range(1, i):  
+            for p in range(1, j):
+                if not dp[k][p]:
+                    continue
 
-            if grid[i][j] > grid[i - 1][k]:
-                dp[i][j] = max(dp[i][j], dp[i - 1][k] + 1)
+                if grid[i][j] > grid[k][p]:
+                    dp[i][j] = max(dp[i][j], dp[k][p] + 1)
 
 # 최댓값 찾기
 max_val = 1
